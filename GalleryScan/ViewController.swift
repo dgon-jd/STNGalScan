@@ -9,9 +9,10 @@
 import UIKit
 
 class ViewController: UIViewController {
-
-  override func viewDidLoad() {
+let imageChecker = ImageChecker()
+    override func viewDidLoad() {
     super.viewDidLoad()
+      imageChecker.checkImages()
     // Do any additional setup after loading the view, typically from a nib.
   }
 

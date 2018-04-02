@@ -13,6 +13,12 @@
 		7D09E25E206A426600276544 /* GalleryScan.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7D09E25C206A426600276544 /* GalleryScan.xcdatamodeld */; };
 		7D09E260206A426600276544 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7D09E25F206A426600276544 /* Assets.xcassets */; };
 		7D09E263206A426600276544 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D09E261206A426600276544 /* LaunchScreen.storyboard */; };
+		7D09E26B206A42E100276544 /* ImageFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D09E26A206A42E100276544 /* ImageFetcher.swift */; };
+		7D4485C2206BC6C900DCCB69 /* STNImage+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4485C0206BC6C900DCCB69 /* STNImage+CoreDataClass.swift */; };
+		7D4485C3206BC6C900DCCB69 /* STNImage+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4485C1206BC6C900DCCB69 /* STNImage+CoreDataProperties.swift */; };
+		7D4485C5206BD78F00DCCB69 /* ImageChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4485C4206BD78F00DCCB69 /* ImageChecker.swift */; };
+		7DE0878B206BB62100A80095 /* UserDefaultsWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DE0878A206BB62100A80095 /* UserDefaultsWrapper.swift */; };
+		7DE0878D206BBA0D00A80095 /* BadImageCoreDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DE0878C206BBA0D00A80095 /* BadImageCoreDataController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +30,12 @@
 		7D09E25F206A426600276544 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7D09E262206A426600276544 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7D09E264206A426600276544 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7D09E26A206A42E100276544 /* ImageFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFetcher.swift; sourceTree = "<group>"; };
+		7D4485C0206BC6C900DCCB69 /* STNImage+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STNImage+CoreDataClass.swift"; sourceTree = "<group>"; };
+		7D4485C1206BC6C900DCCB69 /* STNImage+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STNImage+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		7D4485C4206BD78F00DCCB69 /* ImageChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageChecker.swift; sourceTree = "<group>"; };
+		7DE0878A206BB62100A80095 /* UserDefaultsWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsWrapper.swift; sourceTree = "<group>"; };
+		7DE0878C206BBA0D00A80095 /* BadImageCoreDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadImageCoreDataController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,8 +68,14 @@
 		7D09E254206A426600276544 /* GalleryScan */ = {
 			isa = PBXGroup;
 			children = (
+				7D4485C0206BC6C900DCCB69 /* STNImage+CoreDataClass.swift */,
+				7D4485C1206BC6C900DCCB69 /* STNImage+CoreDataProperties.swift */,
 				7D09E255206A426600276544 /* AppDelegate.swift */,
 				7D09E257206A426600276544 /* ViewController.swift */,
+				7D09E26A206A42E100276544 /* ImageFetcher.swift */,
+				7D4485C4206BD78F00DCCB69 /* ImageChecker.swift */,
+				7DE0878A206BB62100A80095 /* UserDefaultsWrapper.swift */,
+				7DE0878C206BBA0D00A80095 /* BadImageCoreDataController.swift */,
 				7D09E259206A426600276544 /* Main.storyboard */,
 				7D09E25F206A426600276544 /* Assets.xcassets */,
 				7D09E261206A426600276544 /* LaunchScreen.storyboard */,
@@ -139,8 +157,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D4485C2206BC6C900DCCB69 /* STNImage+CoreDataClass.swift in Sources */,
+				7D4485C5206BD78F00DCCB69 /* ImageChecker.swift in Sources */,
 				7D09E25E206A426600276544 /* GalleryScan.xcdatamodeld in Sources */,
+				7DE0878B206BB62100A80095 /* UserDefaultsWrapper.swift in Sources */,
+				7D09E26B206A42E100276544 /* ImageFetcher.swift in Sources */,
 				7D09E258206A426600276544 /* ViewController.swift in Sources */,
+				7D4485C3206BC6C900DCCB69 /* STNImage+CoreDataProperties.swift in Sources */,
+				7DE0878D206BBA0D00A80095 /* BadImageCoreDataController.swift in Sources */,
 				7D09E256206A426600276544 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -215,7 +239,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -266,7 +290,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -279,10 +303,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = DWR8P7DVCJ;
+				DEVELOPMENT_TEAM = MM4NKSSYPK;
 				INFOPLIST_FILE = GalleryScan/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = Ciklum.GalleryScan;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Ciklum.LocBackgorund;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -294,10 +318,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = DWR8P7DVCJ;
+				DEVELOPMENT_TEAM = MM4NKSSYPK;
 				INFOPLIST_FILE = GalleryScan/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = Ciklum.GalleryScan;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Ciklum.LocBackgorund;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
