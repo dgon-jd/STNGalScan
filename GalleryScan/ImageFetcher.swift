@@ -31,32 +31,4 @@ open class ImageFetcher {
     return identifiers
   }
 
-  class func asset(identifier: String, success: @escaping ((_ asset: PHAsset) ->Void)) {
-      let savedAssets = PHAsset.fetchAssets(withLocalIdentifiers: [identifier], options: nil)
-      if let asset = savedAssets.firstObject {
-        success(asset)
-      }
-  }
-
-
-  func image(asset: PHAsset, targetSize: CGSize, success: @escaping ((_ image: UIImage) -> Void)) {
-      let requestOptions = PHImageRequestOptions()
-      requestOptions.resizeMode = .fast
-      requestOptions.deliveryMode = .fastFormat
-      requestOptions.isSynchronous = true
-
-      let imageManager = PHImageManager.default()
-      imageManager.requestImage(for: asset,
-                                targetSize: targetSize,
-                                contentMode: PHImageContentMode.default,
-                                options: requestOptions,
-                                resultHandler: { (image, info) in
-                                  autoreleasepool {
-                                    if let image = image {
-                                      success(image)
-                                    }
-                                  }
-      })
-  }
-
 }
