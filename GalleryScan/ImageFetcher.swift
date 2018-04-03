@@ -11,16 +11,25 @@ import Photos
 
 open class ImageFetcher {
   
-  func assetsFromLibrary(startModificationDate: Date? = nil) -> PHFetchResult<PHAsset> {
+  func assetsFromLibrary(startModificationDate: Date? = nil) -> [String] {
+    let fetchOptionsC = PHFetchOptions()
     let fetchOptions = PHFetchOptions()
+    var identifiers = [String]()
+
     if let date = startModificationDate {
       fetchOptions.predicate = NSPredicate(format: "modificationDate > %@", argumentArray: [date])
     } else {
       fetchOptions.sortDescriptors = [NSSortDescriptor(key: "modificationDate", ascending: true)]
     }
-    
-    let fetchResult = PHAsset.fetchAssets(with: PHAssetMediaType.image, options: fetchOptions)
-    return fetchResult
+    let collections:PHFetchResult = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: fetchOptionsC)
+    collections.enumerateObjects { (collection, count, stop) in
+      let fetchResult = PHAsset.fetchAssets(in: collection, options: fetchOptions)
+      fetchResult.enumerateObjects { (asset, count, stop) in
+        identifiers.append(asset.localIdentifier)
+      }
+    }
+
+    return identifiers
   }
 
   func assetIdentifiers(fetchResult: PHFetchResult<PHAsset>) -> [String] {

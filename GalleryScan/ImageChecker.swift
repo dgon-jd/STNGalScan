@@ -16,9 +16,9 @@ class ImageChecker {
   let imageQueue = OperationQueue()
 
   func checkImages() {
+//    imageQueue.maxConcurrentOperationCount = 1
     imageSaver.fetchAllsavedImages()
-    let assets = imageFetcher.assetsFromLibrary()
-    let identifiers = imageFetcher.assetIdentifiers(fetchResult: assets)
+    let identifiers = imageFetcher.assetsFromLibrary()
     for identifier in identifiers {
       imageQueue.addOperation(ImageProvider(imageId: identifier, idc: imageSaver))
     }
