@@ -9,7 +9,7 @@
 import Foundation
 import Photos
 
-class ImageFetcher {
+open class ImageFetcher {
   
   func assetsFromLibrary(startModificationDate: Date? = nil) -> PHFetchResult<PHAsset> {
     let fetchOptions = PHFetchOptions()
@@ -31,7 +31,7 @@ class ImageFetcher {
     return identifiers
   }
 
-  func asset(identifier: String, success: @escaping ((_ asset: PHAsset) ->Void)) {
+  class func asset(identifier: String, success: @escaping ((_ asset: PHAsset) ->Void)) {
       let savedAssets = PHAsset.fetchAssets(withLocalIdentifiers: [identifier], options: nil)
       if let asset = savedAssets.firstObject {
         success(asset)

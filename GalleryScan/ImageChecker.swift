@@ -12,25 +12,31 @@ import UIKit
 class ImageChecker {
   let imageFetcher = ImageFetcher()
   let imageSaver = BadImageCoreDataController(completion: nil)
-
+  var imageProviders = [ImageProvider]()
   func checkImages() {
     let assets = imageFetcher.assetsFromLibrary()
     let identifiers = imageFetcher.assetIdentifiers(fetchResult: assets)
- 
-    for identifier in identifiers {
-      let queue = DispatchQueue(label: "ImageProcessing" + identifier)
 
-      queue.async { [weak self] in
-         let  queueName = String(cString: __dispatch_queue_get_label(nil), encoding: .utf8)
-        self?.imageFetcher.asset(identifier: identifier, success: { [weak self] asset in
-          print("\(asset) from \(String(describing: queueName))")
-          self?.imageSaver.saveAsset(id: asset.localIdentifier)
-          self?.imageFetcher.image(asset: asset, targetSize: CGSize(width: 100, height: 100), success: { [weak self] image in
-            print("\(image) from \(String(describing: queueName))")
-          })
-        })
-      }
+    for identifier in identifiers {
+
+//      let queue = DispatchQueue(label: "ImageProcessing" + identifier)
+//
+//      queue.async { [weak self] in
+//        let  queueName = String(cString: __dispatch_queue_get_label(nil), encoding: .utf8)
+//        self?.imageFetcher.asset(identifier: identifier, success: { [weak self] asset in
+//          print("\(asset) from \(String(describing: queueName))")
+//          self?.imageSaver.saveAsset(id: asset.localIdentifier)
+//          self?.imageFetcher.image(asset: asset, targetSize: CGSize(width: 100, height: 100), success: { [weak self] image in
+//            print("\(image) from \(String(describing: queueName))")
+//          })
+//        })
+//      }
+      imageProviders.append(ImageProvider(imageId: identifier, completion: { sucess in
+        print("Done")
+      }, idc: imageSaver))
     }
+
+    
 
 //    imageSaver.fetchAllsavedImages()
 

@@ -23,10 +23,12 @@ class BadImageCoreDataController: NSObject {
   }
 
   func saveAsset(id: String) {
-    let context = persistentContainer.newBackgroundContext()
-    let imageModel = self.imageModel(id: id, context: context) ?? NSEntityDescription.insertNewObject(forEntityName: "STNImage", into: context) as! STNImage
-    imageModel.imageId = id
-    try? context.save()
+    persistentContainer.performBackgroundTask { context in
+      let imageModel = self.imageModel(id: id, context: context) ?? NSEntityDescription.insertNewObject(forEntityName: "STNImage", into: context) as! STNImage
+      imageModel.imageId = id
+      try? context.save()
+      print("Saved")
+    }
   }
 
   func imageModel(id: String, context: NSManagedObjectContext) -> STNImage? {
@@ -35,14 +37,6 @@ class BadImageCoreDataController: NSObject {
     let images = try? context.fetch(fetchRequest)
     return images?.first
   }
-
-
-
-
-
-
-
-
 
   func fetchAllsavedImages() {
     let fetchRequest = NSFetchRequest<STNImage>(entityName: "STNImage")
