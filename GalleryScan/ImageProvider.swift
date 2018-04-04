@@ -17,14 +17,13 @@ class ImageProvider: Operation {
   init(imageId: String, idc: BadImageCoreDataController) {
     imageCoreDataController = idc
     self.imageId = imageId
-    operationQueue.maxConcurrentOperationCount = 2
+    operationQueue.maxConcurrentOperationCount = 1
   }
 
   override func main() {
     let imageFetcher = ImageFetchOperation(imageId: imageId)
     let dataLoad = ImageLoadOperation(image: nil)
     let saveOperation = BadImageSaveOperation(idc: imageCoreDataController, image: nil)
-
     let operations = [imageFetcher, dataLoad, saveOperation]
 
     dataLoad.addDependency(imageFetcher)

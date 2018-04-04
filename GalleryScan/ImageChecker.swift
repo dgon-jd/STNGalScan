@@ -16,7 +16,7 @@ class ImageChecker {
   let imageQueue = OperationQueue()
 
   func checkImages() {
-//    imageQueue.maxConcurrentOperationCount = 1
+    imageQueue.maxConcurrentOperationCount = 1
     imageSaver.fetchAllsavedImages()
     let identifiers = imageFetcher.assetsFromLibrary()
     for identifier in identifiers {
