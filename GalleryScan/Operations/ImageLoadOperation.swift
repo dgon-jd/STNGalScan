@@ -9,28 +9,21 @@
 import Foundation
 import UIKit
 
+
+
 protocol ImagePass {
   var image: STNImageObj? { get }
 }
 
 public class ImageLoadOperation: AsyncOperation {
   private var url: URL? = URL(string: "http://imageUrl.com")
-  private let _inputImage: STNImageObj?
-
-  public var inputImage: STNImageObj? {
-    var image: STNImageObj?
-    if let inputImage = _inputImage {
-      image = inputImage
-    } else if let dataProvider = dependencies
-      .filter({ $0 is ImagePass })
-      .first as? ImagePass {
-      image = dataProvider.image
-    }
-    return image
-  }
-
-  public init(image: STNImageObj? = nil) {
-    _inputImage = image
+  private var uploadCompletion: ((_ batchId: String) -> Void)?
+  public var inputImage: STNImageObj?
+  public var batchId: String?
+  
+  public init(image: STNImageObj? = nil, completion: ((_ batchId: String) -> Void)?) {
+    inputImage = image
+    uploadCompletion = completion
     super.init()
   }
 
@@ -45,6 +38,7 @@ public class ImageLoadOperation: AsyncOperation {
     let task = URLSession.shared.uploadTask(with: urlRequest, from: UIImagePNGRepresentation(image)) { (data, response, error) in
       if self.isCancelled { return }
       print("Loaded")
+      self.uploadCompletion?("someBathId")
       self.state = .finished
 
     }

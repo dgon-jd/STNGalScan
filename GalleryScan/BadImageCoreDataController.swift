@@ -22,11 +22,12 @@ class BadImageCoreDataController: NSObject {
     }
   }
 
-  func saveAsset(id: String) {
+  func saveAsset(id: String, success: (() -> Void)?) {
     persistentContainer.performBackgroundTask { context in
       let imageModel = self.imageModel(id: id, context: context) ?? NSEntityDescription.insertNewObject(forEntityName: "STNImage", into: context) as! STNImage
       imageModel.imageId = id
       try? context.save()
+      success?()
       print("Saved")
     }
   }

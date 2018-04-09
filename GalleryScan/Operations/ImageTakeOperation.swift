@@ -9,6 +9,11 @@
 import Foundation
 import UIKit
 
+protocol OperationObjectPass {
+  associatedtype O
+  var item: O? { get }
+}
+
 open class STNImageObj {
   var image: UIImage?
   var assetId: String?
@@ -19,30 +24,35 @@ open class STNImageObj {
   }
 }
 
-open class ImageTakeOperation: Operation {
-  var outputImage: STNImageObj?
-  private let _inputImage: STNImageObj?
 
-  public init(image: STNImageObj? = nil) {
-    _inputImage = image
+
+open class QueueOperation<Input, Output>: AsyncOperation {
+  private let _input: Input?
+  var output: Output?
+
+  public init(input: Input? = nil) {
+    _input = input
     super.init()
   }
 
-  public var inputImage: STNImageObj? {
-    var image: STNImageObj?
-    if let inputImage = _inputImage {
-      image = inputImage
-    } else if let dataProvider = dependencies
-      .filter({ $0 is ImagePass })
-      .first as? ImagePass {
-      image = dataProvider.image
+  public var input: Input? {
+    var inputObj: Input?
+    if let input = _input {
+      inputObj = input
+    } else if let op = dependencies
+      .filter({ $0 is QueueOperation<Any, Input> })
+      .first as? QueueOperation<Any, Input> {
+      inputObj = op.output
     }
-    return image
+    return inputObj
   }
 }
 
-extension ImageTakeOperation: ImagePass {
-  var image: STNImageObj? {
-    return outputImage
+extension QueueOperation: OperationObjectPass {
+  typealias O = Output
+  var item: O? {
+    return output
   }
 }
+
+

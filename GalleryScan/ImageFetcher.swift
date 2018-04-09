@@ -9,6 +9,23 @@
 import Foundation
 import Photos
 
+class PhotosBatch {
+  var batchId: String
+  var operations: [String : Operation] = [:]
+  init(id: String) {
+    batchId = id
+  }
+
+  func addToBatch(imageId: String) {
+    let operation = Operation()
+    operations[imageId] = operation
+  }
+
+  private func checkProgress() {
+
+  }
+}
+
 open class ImageFetcher {
   
   func assetsFromLibrary(startModificationDate: Date? = nil) -> [String] {

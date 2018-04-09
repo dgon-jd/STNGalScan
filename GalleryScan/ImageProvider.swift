@@ -8,28 +8,44 @@
 
 import Foundation
 import UIKit
-class ImageProvider: Operation {
+class ImageProvider: AsyncOperation {
 
   private var operationQueue = OperationQueue ()
   let imageId: String
   let imageSaver = BadImageCoreDataController(completion: nil)
   var imageCoreDataController: BadImageCoreDataController!
-  init(imageId: String, idc: BadImageCoreDataController) {
+  private var uploadCompletion: ((_ batchId: String) -> Void)?
+
+  init(imageId: String, idc: BadImageCoreDataController, completion: ((_ batchId: String) -> Void)?) {
     imageCoreDataController = idc
     self.imageId = imageId
+    uploadCompletion = completion
     operationQueue.maxConcurrentOperationCount = 1
   }
 
   override func main() {
     let imageFetcher = ImageFetchOperation(imageId: imageId)
-    let dataLoad = ImageLoadOperation(image: nil)
-    let saveOperation = BadImageSaveOperation(idc: imageCoreDataController, image: nil)
-    let operations = [imageFetcher, dataLoad, saveOperation]
+    let dataLoad = ImageLoadOperation(completion: uploadCompletion)
+    let fetchLoadAdapter = BlockOperation {
+      dataLoad.inputImage = imageFetcher.image
+    }
+    fetchLoadAdapter.addDependency(imageFetcher)
+    dataLoad.addDependency(fetchLoadAdapter)
 
-    dataLoad.addDependency(imageFetcher)
+    let saveOperation = BadImageSaveOperation(idc: imageCoreDataController, image: nil, success: nil)
+    let loadSaveAdapter = BlockOperation {
+      saveOperation.inputImage = imageFetcher.image
+      saveOperation.batchId = dataLoad.batchId
+    }
+    loadSaveAdapter.addDependency(dataLoad)
     saveOperation.addDependency(imageFetcher)
-    saveOperation.addDependency(dataLoad)
+    saveOperation.addDependency(loadSaveAdapter)
+    let finishOperation = BlockOperation {
+      self.state = .finished
+    }
 
+    finishOperation.addDependency(saveOperation)
+    let operations = [imageFetcher, fetchLoadAdapter, dataLoad, loadSaveAdapter,saveOperation, finishOperation ]
     operationQueue.addOperations(operations, waitUntilFinished: false)
   }
 
