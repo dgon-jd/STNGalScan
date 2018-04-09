@@ -51,10 +51,23 @@ class ImageChecker {
         self.batchOperatingQueue.addOperation {
           self.batchIdsToProcess.remove(batchId)
           self.processedBatchIds.insert(batchId)
+          self.cancelOperationsForBatchId(id: batchId)
           print("Done batches: \(self.processedBatchIds)")
         }
       }
       batchOperatingQueue.addOperation(operation)
+    }
+  }
+
+  func cancelOperationsForBatchId(id: String) {
+    let operationsToCancel = batchOperatingQueue.operations
+      .filter { $0 is BatchLoadOperation }
+      .filter {
+        let op = $0 as! BatchLoadOperation
+        return op.batchId == id
+    }
+    for op in operationsToCancel {
+      op.cancel()
     }
   }
 }

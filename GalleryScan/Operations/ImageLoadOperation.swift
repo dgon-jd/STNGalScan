@@ -46,7 +46,7 @@ public class ImageLoadOperation: AsyncOperation {
 
 public class BatchLoadOperation: AsyncOperation {
   private var url: URL? = URL(string: "http://imageUrl.com")
-  private var batchId: String
+  public var batchId: String
   public var imageResults: [String : String]?
   public init(id: String) {
     batchId = id
