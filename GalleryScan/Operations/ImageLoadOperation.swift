@@ -48,6 +48,7 @@ public class BatchLoadOperation: AsyncOperation {
   private var url: URL? = URL(string: "http://imageUrl.com")
   public var batchId: String
   public var imageResults: [String : String]?
+  public var batchSucessfullyFinished: Bool = false
   public init(id: String) {
     batchId = id
     super.init()
@@ -59,7 +60,7 @@ public class BatchLoadOperation: AsyncOperation {
     let urlRequest = URLRequest(url: batchURL)
     let task = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
       if self.isCancelled { return }
-
+      self.batchSucessfullyFinished = arc4random_uniform(2) == 0
       self.imageResults = ["sdfdf": "true",
                      "sdfdgdd": "false"]
       self.state = .finished

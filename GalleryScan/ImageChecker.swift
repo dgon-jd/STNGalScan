@@ -9,9 +9,12 @@
 import Foundation
 import UIKit
 
+enum BatchStatus {
+  case waiting, pending, processed
+}
+
 class ImageChecker {
-  var batchIdsToProcess: Set<String> = []
-  var processedBatchIds: Set<String> = []
+  var batches: [String: BatchStatus] = [:]
   let batchOperatingQueue = OperationQueue()
   let imageFetcher = ImageFetcher()
   let imageSaver = BadImageCoreDataController(completion: nil)
@@ -24,38 +27,43 @@ class ImageChecker {
 //    imageQueue.maxConcurrentOperationCount = 1
   }
   func checkImages() {
+    batches.removeAll()
     imageSaver.fetchAllsavedImages()
     let identifiers = imageFetcher.assetsFromLibrary()
     for identifier in identifiers {
       let operation = ImageProvider(imageId: identifier, idc: imageSaver)
       operation.completionBlock = {
-        if let id = operation.batchId, !self.processedBatchIds.contains(id) {
-          self.batchOperatingQueue.addOperation({
-            self.batchIdsToProcess.insert(id)
-          })
+        if let id = operation.batchId {
+          self.addToWaitList(batchId: id)
         }
-        print(self.batchIdsToProcess.count)
+        print(self.batches.count)
       }
       imageQueue.addOperation(operation)
     }
   }
 
-  @objc func checkBatches() {
-    print("Processing batches: \(self.batchIdsToProcess)")
-    if batchIdsToProcess.isEmpty {
-      processedBatchIds.removeAll()
+  func addToWaitList(batchId: String) {
+    if self.batches[batchId] == nil {
+      self.batchOperatingQueue.addOperation({
+        self.batches[batchId] = .waiting
+      })
     }
-    for batchId in batchIdsToProcess {
-      let operation = BatchLoadOperation(id: batchId)
-      operation.completionBlock = {
-        self.batchOperatingQueue.addOperation {
-          self.batchIdsToProcess.remove(batchId)
-          self.processedBatchIds.insert(batchId)
-          self.cancelOperationsForBatchId(id: batchId)
-          print("Done batches: \(self.processedBatchIds)")
+  }
+  @objc func checkBatches() {
+    print("Processing batches: \(batches)")
+    for (batchId, status) in batches {
+      if status == .waiting {
+        batches[batchId] = .pending
+        let operation = BatchLoadOperation(id: batchId)
+        operation.completionBlock = {
+          self.batchOperatingQueue.addOperation {
+            self.batches[batchId] = operation.batchSucessfullyFinished ? .processed : .waiting
+            self.cancelOperationsForBatchId(id: batchId)
+            print("Processing batches: \(self.batches)")
+          }
         }
+        batchOperatingQueue.addOperation(operation)
       }
-      batchOperatingQueue.addOperation(operation)
     }
   }
 
