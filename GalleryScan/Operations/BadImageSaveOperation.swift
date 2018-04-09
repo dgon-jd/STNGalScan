@@ -22,11 +22,11 @@ class BadImageSaveOperation: AsyncOperation {
   }
 
   override func main() {
-    if let id = self.inputImage?.assetId {
-      badImageCoreDataController.saveAsset(id: id, success: {
+    if (self.inputImage?.assetId) != nil {
+      badImageCoreDataController.saveAsset(item: inputImage!, batchId: batchId) {
         self.successBlock?()
         self.state = .finished
-      })
+      }
     }
   }
 }

@@ -14,18 +14,17 @@ class ImageProvider: AsyncOperation {
   let imageId: String
   let imageSaver = BadImageCoreDataController(completion: nil)
   var imageCoreDataController: BadImageCoreDataController!
-  private var uploadCompletion: ((_ batchId: String) -> Void)?
+  var batchId: String?
 
-  init(imageId: String, idc: BadImageCoreDataController, completion: ((_ batchId: String) -> Void)?) {
+  init(imageId: String, idc: BadImageCoreDataController) {
     imageCoreDataController = idc
     self.imageId = imageId
-    uploadCompletion = completion
     operationQueue.maxConcurrentOperationCount = 1
   }
 
   override func main() {
     let imageFetcher = ImageFetchOperation(imageId: imageId)
-    let dataLoad = ImageLoadOperation(completion: uploadCompletion)
+    let dataLoad = ImageLoadOperation()
     let fetchLoadAdapter = BlockOperation {
       dataLoad.inputImage = imageFetcher.image
     }
@@ -36,6 +35,7 @@ class ImageProvider: AsyncOperation {
     let loadSaveAdapter = BlockOperation {
       saveOperation.inputImage = imageFetcher.image
       saveOperation.batchId = dataLoad.batchId
+      self.batchId = dataLoad.batchId
     }
     loadSaveAdapter.addDependency(dataLoad)
     saveOperation.addDependency(imageFetcher)

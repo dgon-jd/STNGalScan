@@ -17,13 +17,11 @@ protocol ImagePass {
 
 public class ImageLoadOperation: AsyncOperation {
   private var url: URL? = URL(string: "http://imageUrl.com")
-  private var uploadCompletion: ((_ batchId: String) -> Void)?
   public var inputImage: STNImageObj?
   public var batchId: String?
   
-  public init(image: STNImageObj? = nil, completion: ((_ batchId: String) -> Void)?) {
+  public init(image: STNImageObj? = nil) {
     inputImage = image
-    uploadCompletion = completion
     super.init()
   }
 
@@ -38,9 +36,33 @@ public class ImageLoadOperation: AsyncOperation {
     let task = URLSession.shared.uploadTask(with: urlRequest, from: UIImagePNGRepresentation(image)) { (data, response, error) in
       if self.isCancelled { return }
       print("Loaded")
-      self.uploadCompletion?("someBathId")
+      let id = "someBathId+\(arc4random_uniform(101))"
+      self.batchId = id
       self.state = .finished
+    }
+    task.resume()
+  }
+}
 
+public class BatchLoadOperation: AsyncOperation {
+  private var url: URL? = URL(string: "http://imageUrl.com")
+  private var batchId: String
+  public var imageResults: [String : String]?
+  public init(id: String) {
+    batchId = id
+    super.init()
+  }
+
+  override public func main() {
+    if self.isCancelled { return}
+    guard let batchURL = url else {return}
+    let urlRequest = URLRequest(url: batchURL)
+    let task = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+      if self.isCancelled { return }
+
+      self.imageResults = ["sdfdf": "true",
+                     "sdfdgdd": "false"]
+      self.state = .finished
     }
     task.resume()
   }

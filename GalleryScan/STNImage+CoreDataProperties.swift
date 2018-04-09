@@ -21,5 +21,6 @@ extension STNImage {
     @NSManaged public var imageId: String?
     @NSManaged public var markedForReview: Bool
     @NSManaged public var resolveDate: NSDate?
-
+    @NSManaged public var batchId: String?
+    @NSManaged public var status: String?
 }
