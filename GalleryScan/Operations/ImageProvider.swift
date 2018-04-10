@@ -12,7 +12,6 @@ class ImageProvider: AsyncOperation {
 
   private var operationQueue = OperationQueue ()
   let imageId: String
-  let imageSaver = BadImageCoreDataController(completion: nil)
   var imageCoreDataController: BadImageCoreDataController!
   var batchId: String?
 
@@ -31,10 +30,9 @@ class ImageProvider: AsyncOperation {
     fetchLoadAdapter.addDependency(imageFetcher)
     dataLoad.addDependency(fetchLoadAdapter)
 
-    let saveOperation = BadImageSaveOperation(idc: imageCoreDataController, image: nil, success: nil)
+    let saveOperation = BadImageSaveOperation(idc: imageCoreDataController, image: nil)
     let loadSaveAdapter = BlockOperation {
       saveOperation.inputImage = imageFetcher.image
-      saveOperation.batchId = dataLoad.batchId
       self.batchId = dataLoad.batchId
     }
     loadSaveAdapter.addDependency(dataLoad)

@@ -2,7 +2,7 @@
 //  STNImage+CoreDataProperties.swift
 //  GalleryScan
 //
-//  Created by Dmitry Goncharenko on 3/28/18.
+//  Created by Dmitry Goncharenko on 4/10/18.
 //  Copyright © 2018 Ciklum. All rights reserved.
 //
 //
@@ -21,6 +21,7 @@ extension STNImage {
     @NSManaged public var imageId: String?
     @NSManaged public var markedForReview: Bool
     @NSManaged public var resolveDate: NSDate?
-    @NSManaged public var batchId: String?
     @NSManaged public var status: String?
+    @NSManaged public var processedTimestamp: NSDate?
+
 }

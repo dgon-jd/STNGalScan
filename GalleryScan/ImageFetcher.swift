@@ -38,14 +38,17 @@ open class ImageFetcher {
     } else {
       fetchOptions.sortDescriptors = [NSSortDescriptor(key: "modificationDate", ascending: true)]
     }
-    let collections:PHFetchResult = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: fetchOptionsC)
+//    let collections:PHFetchResult = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: fetchOptionsC)
     let fetchResult = PHAsset.fetchAssets(with: fetchOptions)
-    collections.enumerateObjects { (collection, count, stop) in
+//    fetchResult.enumerateObjects { (asset, count, stop) in
+//      identifiers.append(asset.localIdentifier)
+//    }
+//    collections.enumerateObjects { (collection, count, stop) in
 //      let fetchResult = PHAsset.fetchAssets(in: collection, options: fetchOptions)
       fetchResult.enumerateObjects { (asset, count, stop) in
         identifiers.append(asset.localIdentifier)
       }
-    }
+//    }
 
     return identifiers
   }

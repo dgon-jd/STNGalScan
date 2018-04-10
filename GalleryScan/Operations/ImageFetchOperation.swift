@@ -27,7 +27,6 @@ public class ImageFetchOperation : AsyncOperation {
     if let asset = savedAssets.firstObject {
       self.image(asset: asset, targetSize: CGSize(width: 100, height: 100), success: { image in
         if self.isCancelled { return }
-        
         self.outputImage = STNImageObj(im: image, asId: self._imageId)
         self.state = .finished
         print(image)

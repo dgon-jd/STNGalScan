@@ -11,40 +11,64 @@ import CoreData
 
 class BadImageCoreDataController: NSObject {
   var persistentContainer: NSPersistentContainer
-
+  var backGorundContext: NSManagedObjectContext!
   init(completion: (() -> ())?) {
-    persistentContainer = NSPersistentContainer(name: "GalleryScan" )
+    let momdName = "GalleryScan"
+
+    guard let modelURL = Bundle(for: type(of: self)).url(forResource: momdName, withExtension:"momd") else {
+      fatalError("Error loading model from bundle")
+    }
+
+    guard let mom = NSManagedObjectModel(contentsOf: modelURL) else {
+      fatalError("Error initializing mom from: \(modelURL)")
+    }
+
+    persistentContainer = NSPersistentContainer(name: momdName, managedObjectModel: mom)
+//    persistentContainer = NSPersistentContainer(name: "GalleryScan" )
     persistentContainer.loadPersistentStores { (description, error) in
       if let error = error {
         fatalError("Failed to load Core Data stack: \(error)")
       }
       completion?()
     }
+    backGorundContext = persistentContainer.newBackgroundContext()
   }
 
-  func saveAsset(item: STNImageObj, batchId: String?, success: (() -> Void)?) {
-    persistentContainer.performBackgroundTask { context in
+  func saveAsset(item: STNImageObj, success: (() -> Void)?) {
+//    backGorundContext.perform {
+//
+//    }
+    persistentContainer.performBackgroundTask { (context) in
       let imageModel = self.imageModel(id: item.assetId!, context: context) ?? NSEntityDescription.insertNewObject(forEntityName: "STNImage", into: context) as! STNImage
       imageModel.imageId = item.assetId!
-      imageModel.batchId = batchId
-      try? context.save()
+      print("Saving \(imageModel.imageId)")
+      do {
+        try context.save()
+      } catch {
+        fatalError("Cannot save")
+      }
       success?()
-      print("Saved")
     }
   }
 
   func imageModel(id: String, context: NSManagedObjectContext) -> STNImage? {
     let fetchRequest = NSFetchRequest<STNImage>(entityName: "STNImage")
     fetchRequest.predicate = NSPredicate(format: "imageId = %@", id)
-    let images = try? context.fetch(fetchRequest)
-    return images?.first
+    var images = [STNImage]()
+    do {
+      images = try context.fetch(fetchRequest)
+    }
+    catch {
+      fatalError("Failed to fetch image!: \(error)")
+    }
+    return images.first
   }
 
   func fetchAllsavedImages() {
     let fetchRequest = NSFetchRequest<STNImage>(entityName: "STNImage")
     do {
       let images = try persistentContainer.viewContext.fetch(fetchRequest)
-      print(images.count)
+      print("Count: \(images.count)")
     } catch {
       fatalError("Failed to fetch images: \(error)")
     }
